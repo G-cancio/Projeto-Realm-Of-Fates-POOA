@@ -18,7 +18,6 @@ import java.util.List; // importa a interface List para usar listas
  */
 public class Personagem {
 
-    // Atributos obrigatorios — todo personagem precisa ter esses valores
     private String nome;
     private String classe;
     private String raca;
@@ -26,87 +25,28 @@ public class Personagem {
     private int inteligencia;
     private int destreza;
     private int resistencia;
-
-    // Atributos opcionais — o personagem pode existir sem esses valores
     private String armaPrincipal;
     private String armadura;
-    private List<String> habilidades; // lista de ate 3 habilidades especiais
+    private List<String> habilidades;
     private String background;
+    private int hpMaximo;
+    private int hpAtual;
 
-    // HP (pontos de vida) calculado a partir da resistencia
-    private int hpMaximo; // valor maximo de HP do personagem
-    private int hpAtual;  // HP atual durante a batalha
-
-    // ---------------------------------------------------------------
-    // PROBLEMA 1: Construtor telescopico com 11 parametros.
-    // Quem for criar um personagem precisa passar todos os valores na
-    // ordem certa, incluindo null para os campos opcionais.
-    // Exemplo do problema: new Personagem("Gandalf","Mago","Humano",
-    //   8,20,10,12,"Cajado",null,null,null) — os nulls nao tem significado
-    // ---------------------------------------------------------------
-    public Personagem(String nome, String classe, String raca,
-                      int forca, int inteligencia, int destreza, int resistencia,
-                      String armaPrincipal, String armadura,
-                      List<String> habilidades, String background) {
-        // atribui cada parametro ao campo correspondente da classe
-        this.nome = nome;
-        this.classe = classe;
-        this.raca = raca;
-        this.forca = forca;
-        this.inteligencia = inteligencia;
-        this.destreza = destreza;
-        this.resistencia = resistencia;
-        this.armaPrincipal = armaPrincipal;
-        this.armadura = armadura;
-        this.habilidades = habilidades;
-        this.background = background;
-
-        // calcula o HP maximo: base de 100 + 5 pontos por cada ponto de resistencia
-        this.hpMaximo = 100 + (resistencia * 5);
-        this.hpAtual = this.hpMaximo; // comeca com HP cheio
+    private Personagem(PersonagemBuilder personagemBuilder) {
+        this.nome = personagemBuilder.nome;
+        this.classe = personagemBuilder.classe;
+        this.raca = personagemBuilder.raca;
+        this.forca = personagemBuilder.forca;
+        this.inteligencia = personagemBuilder.inteligencia;
+        this.destreza = personagemBuilder.destreza;
+        this.resistencia = personagemBuilder.resistencia;
+        this.armaPrincipal = personagemBuilder.armaPrincipal;
+        this.armadura = personagemBuilder.armadura;
+        this.habilidades = personagemBuilder.habilidades;
+        this.background = personagemBuilder.background;
+        this.hpMaximo = personagemBuilder.hpMaximo;
     }
 
-    // ---------------------------------------------------------------
-    // PROBLEMA 2: Construtor vazio — o objeto nasce sem nenhum dado.
-    // Todos os campos ficam null (para String) ou 0 (para int).
-    // O personagem existe na memoria mas esta completamente invalido.
-    // ---------------------------------------------------------------
-    public Personagem() {
-        // corpo vazio intencional — demonstra o problema
-    }
-
-    /**
-     * Inicializa o HP do personagem com base na resistencia.
-     *
-     * PROBLEMA: este metodo precisa ser chamado manualmente apos os setters.
-     * Se o programador esquecer de chamar, hpMaximo fica 0 e o personagem
-     * nao consegue lutar. Nao ha nenhum aviso ou erro automatico.
-     */
-    public void inicializarHP() {
-        this.hpMaximo = 100 + (resistencia * 5); // mesmo calculo do construtor cheio
-        this.hpAtual = this.hpMaximo;
-    }
-
-    // ---------------------------------------------------------------
-    // SETTERS — metodos para definir o valor de cada campo.
-    // Usados no PROBLEMA 2, junto com o construtor vazio.
-    // ---------------------------------------------------------------
-    public void setNome(String nome)                     { this.nome = nome; }
-    public void setClasse(String classe)                 { this.classe = classe; }
-    public void setRaca(String raca)                     { this.raca = raca; }
-    public void setForca(int forca)                      { this.forca = forca; }
-    public void setInteligencia(int inteligencia)        { this.inteligencia = inteligencia; }
-    public void setDestreza(int destreza)                { this.destreza = destreza; }
-    public void setResistencia(int resistencia)          { this.resistencia = resistencia; }
-    public void setArmaPrincipal(String armaPrincipal)   { this.armaPrincipal = armaPrincipal; }
-    public void setArmadura(String armadura)             { this.armadura = armadura; }
-    public void setHabilidades(List<String> habilidades) { this.habilidades = habilidades; }
-    public void setBackground(String background)         { this.background = background; }
-
-    // ---------------------------------------------------------------
-    // GETTERS — metodos para ler o valor de cada campo.
-    // Usados pela Batalha para acessar os dados do personagem.
-    // ---------------------------------------------------------------
     public String getNome()              { return nome; }
     public String getClasse()            { return classe; }
     public String getRaca()              { return raca; }
@@ -153,9 +93,7 @@ public class Personagem {
      * Cada classe tem um bonus diferente de dano.
      */
     public int calcularDano() {
-        int bonus = 0; // bonus adicional baseado na classe
-
-        // verifica qual e a classe e define o bonus correspondente
+        int bonus = 0;
 
         if (classe != null) {
             switch (classe) {
@@ -166,8 +104,6 @@ public class Personagem {
                 case "Paladino" -> bonus = 3;
             }
         }
-
-        // dano = forca + metade da destreza + bonus da classe
         return forca + (destreza / 2) + bonus;
     }
 
@@ -192,9 +128,6 @@ public class Personagem {
      * Os blocos vazios (░) representam o HP perdido.
      */
     public String barraHP() {
-        // protecao: se HP nao foi inicializado, avisa em vez de dividir por zero
-        if (hpMaximo == 0) return "[HP nao inicializado]";
-
         int total = 20; // tamanho total da barra em caracteres
 
         // calcula quantos blocos cheios devem aparecer
@@ -218,12 +151,100 @@ public class Personagem {
     @Override
     public String toString() {
         return "Nome: " + nome + " | Classe: " + classe + " | Raca: " + raca + "\n"
-             + "Forca: " + forca + " | Intel: " + inteligencia
+             + "Forca: " + forca + " | Inteligencia: " + inteligencia
              + " | Destreza: " + destreza + " | Resistencia: " + resistencia + "\n"
              // se armaPrincipal for null, exibe "Nenhuma"; senao exibe o valor
              + "Arma: "      + (armaPrincipal != null ? armaPrincipal : "Nenhuma")
              + " | Armadura: " + (armadura    != null ? armadura      : "Nenhuma")
              + " | Background: " + (background != null ? background   : "Nenhum") + "\n"
              + "Habilidades: " + (habilidades != null ? habilidades   : "Nenhuma");
+    }
+
+    public static class PersonagemBuilder {
+
+        private String nome;
+        private String classe;
+        private String raca;
+        private int forca;
+        private int inteligencia;
+        private int destreza;
+        private int resistencia;
+
+        // Atributos opcionais — o personagem pode existir sem esses valores
+        private String armaPrincipal;
+        private String armadura;
+        private List<String> habilidades; // lista de ate 3 habilidades especiais
+        private String background;
+
+        // HP (pontos de vida) calculado a partir da resistencia
+        private int hpMaximo; // valor maximo de HP do personagem
+        private int hpAtual;  // HP atual durante a batalha
+
+        public PersonagemBuilder nome(String nome) {
+            this.nome = nome;
+            return this;
+        }
+
+        public PersonagemBuilder classe(String classe) {
+            this.classe = classe;
+            return this;
+        }
+        public PersonagemBuilder raca(String raca) {
+            this.raca = raca;
+            return this;
+        }
+        public PersonagemBuilder forca(int forca) {
+            this.forca = forca;
+            return this;
+        }
+        public PersonagemBuilder inteligencia(int inteligencia) {
+            this.inteligencia = inteligencia;
+            return this;
+        }
+        public PersonagemBuilder destreza(int destreza) {
+            this.destreza = destreza;
+            return this;
+        }
+        public PersonagemBuilder resistencia(int resistencia) {
+            this.resistencia = resistencia;
+            return this;
+        }
+
+        // Atributos opcionais — o personagem pode existir sem esses valores
+        public PersonagemBuilder armaPrincipal(String armaPrincipal) {
+            this.armaPrincipal = armaPrincipal;
+            return this;
+        }
+
+        public PersonagemBuilder armadura(String armadura) {
+            this.armadura = armadura;
+            return this;
+        }
+
+        public PersonagemBuilder habilidades(List<String> habilidades) {
+            this.habilidades = habilidades;
+            return this;
+        }
+
+        public PersonagemBuilder background(String background) {
+            this.background = background;
+            return this;
+        }
+
+        public PersonagemBuilder hp() {
+            this.hpMaximo = 100 + (resistencia * 5);
+            this.hpAtual = this.hpMaximo;
+            return this;
+        }
+
+        public Personagem build() {
+            if (nome == null || classe == null || raca == null) {
+                throw new IllegalMonitorStateException("Este campo precisa ser preenchido!");
+            }
+            if (forca == 0 || inteligencia == 0 || destreza == 0 || resistencia == 0) {
+                throw new IllegalMonitorStateException("Nenhum atributo pode ser menor que 1!");
+            }
+            return new Personagem(this);
+        }
     }
 }
