@@ -239,10 +239,10 @@ public class Personagem {
 
         public Personagem build() {
             if (nome == null || classe == null || raca == null) {
-                throw new IllegalMonitorStateException("Este campo precisa ser preenchido!");
+                throw new IllegalStateException("Este campo precisa ser preenchido!");
             }
             if (forca == 0 || inteligencia == 0 || destreza == 0 || resistencia == 0) {
-                throw new IllegalMonitorStateException("Nenhum atributo pode ser menor que 1!");
+                throw new IllegalStateException("Nenhum atributo pode ser menor que 1!");
             }
             return new Personagem(this);
         }
