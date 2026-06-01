@@ -196,12 +196,12 @@ public class CriadorPersonagem {
 
             if (opcao == 0) break; // jogador encerrou a selecao
 
-            String hab = habilidadesDisponiveis[opcao - 1]; // pega o nome da habilidade escolhida
+            String habilidade = habilidadesDisponiveis[opcao - 1]; // pega o nome da habilidade escolhida
 
             // verifica se a habilidade ja foi escolhida antes
-            if (!escolhidas.contains(hab)) {
-                escolhidas.add(hab); // adiciona a lista
-                System.out.println("  Adicionada: " + hab + " (" + escolhidas.size() + "/3)");
+            if (!escolhidas.contains(habilidade)) {
+                escolhidas.add(habilidade); // adiciona a lista
+                System.out.println("  Adicionada: " + habilidade + " (" + escolhidas.size() + "/3)");
             } else {
                 System.out.println("  Habilidade ja escolhida.");
             }
@@ -235,7 +235,7 @@ public class CriadorPersonagem {
         while (true) {
             System.out.print("  " + nome + " (1 a " + maximo + "): ");
             try {
-                int valor = Integer.parseInt(scanner.nextLine()); // converte texto para numero
+                int valor = scanner.nextInt(); //Integer.parseInt(scanner.nextLine()); // converte texto para numero
                 if (valor >= 1 && valor <= maximo) return valor;     // valor valido: retorna
                 System.out.println("  Valor invalido.");        // fora do intervalo
             } catch (NumberFormatException e) {
@@ -255,8 +255,8 @@ public class CriadorPersonagem {
         while (true) {
             System.out.print("  Opcao [" + minimo + "-" + maximo + "]: ");
             try {
-                int op = Integer.parseInt(scanner.nextLine()); // converte texto para numero
-                if (op >= minimo && op <= maximo) return op;         // opcao valida: retorna
+                int opcao = scanner.nextInt();//Integer.parseInt(scanner.nextLine()); // converte texto para numero
+                if (opcao >= minimo && opcao <= maximo) return opcao;         // opcao valida: retorna
                 System.out.println("  Opcao invalida.");
             } catch (NumberFormatException e) {
                 // mesmo tratamento: jogador digitou algo que nao e numero
