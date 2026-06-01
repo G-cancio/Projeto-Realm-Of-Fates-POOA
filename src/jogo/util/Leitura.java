@@ -5,11 +5,7 @@ import java.util.Scanner;
 public class Leitura {
 
     private static Scanner scanner = new Scanner(System.in);
-    /**
-     * Pede ao jogador que escolha uma opcao do menu entre min e max.
-     * Fica em loop ate receber um numero valido dentro do intervalo.
-     * "public" porque tambem e usado pela classe Batalha.
-     */
+
     public static int lerOpcao(int minimo, int maximo) {
         while (true) {
             System.out.print("  Opcao [" + minimo + "-" + maximo + "]: ");
