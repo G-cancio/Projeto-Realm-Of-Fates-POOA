@@ -1,10 +1,9 @@
 package jogo;
+import java.util.Scanner;
+import jogo.model.Personagem;
 import jogo.service.Batalha;
 import jogo.service.CriadorPersonagem;
-import jogo.model.Personagem;
 import jogo.util.Leitura;
-
-import java.util.Scanner;
 
 public class Main {
 
