@@ -1,6 +1,7 @@
 package jogo.service;
 
 import jogo.model.Personagem;
+import jogo.util.Leitura;
 
 import java.util.ArrayList; // importa ArrayList, uma implementacao de lista dinamica
 import java.util.List;      // importa a interface List
@@ -70,7 +71,7 @@ public class CriadorPersonagem {
 
         String[] classes = {"Guerreiro", "Mago", "Arqueiro", "Ladino", "Paladino"};
 
-        indexClasse = lerOpcao(1, 5) - 1;
+        indexClasse = Leitura.lerOpcao(1, 5) - 1;
         return classes[indexClasse];
     }
 
@@ -83,16 +84,16 @@ public class CriadorPersonagem {
         System.out.println("  [5] Halfling — +6 Destreza");
 
         String[] racas = {"Humano", "Elfo", "Anao", "Orc", "Halfling"};
-        return racas[lerOpcao(1, 5) - 1];
+        return racas[Leitura.lerOpcao(1, 5) - 1];
     }
 
     public static List<Integer> escolherAtributos(){
         System.out.println("\nDistribua 40 pontos entre os 4 atributos (minimo 1 cada):");
         int pontos = 40;
 
-        int forca        = lerAtributo("Forca",        pontos - 3); pontos -= forca;
-        int inteligencia = lerAtributo("Inteligencia", pontos - 2); pontos -= inteligencia;
-        int destreza     = lerAtributo("Destreza",     pontos - 1); pontos -= destreza;
+        int forca        = Leitura.lerAtributo("Forca",        pontos - 3); pontos -= forca;
+        int inteligencia = Leitura.lerAtributo("Inteligencia", pontos - 2); pontos -= inteligencia;
+        int destreza     = Leitura.lerAtributo("Destreza",     pontos - 1); pontos -= destreza;
         int resistencia  = pontos;
 
         System.out.println("  Resistencia: " + resistencia + " (pontos restantes)");
@@ -108,7 +109,7 @@ public class CriadorPersonagem {
         System.out.println("  [4] Nenhuma — Sem reducao");
 
         String[] armaduras = {"Pesada", "Media", "Leve", null};
-        return armaduras[lerOpcao(1, 4) - 1];
+        return armaduras[Leitura.lerOpcao(1, 4) - 1];
     }
 
     public static String escolherArma(){
@@ -127,7 +128,7 @@ public class CriadorPersonagem {
             System.out.println("  [" + (i + 1) + "] " + armasDisponiveis[i]);
         }
 
-        return armasDisponiveis[lerOpcao(1, armasDisponiveis.length) - 1];
+        return armasDisponiveis[Leitura.lerOpcao(1, armasDisponiveis.length) - 1];
     }
 
     public static List<String> escolherHabilidades(){
@@ -153,7 +154,7 @@ public class CriadorPersonagem {
         List<String> escolhidas = new ArrayList<>();
 
         while (escolhidas.size() < 3) {
-            int opcao = lerOpcao(0, habilidadesDisponiveis.length);
+            int opcao = Leitura.lerOpcao(0, habilidadesDisponiveis.length);
 
             if (opcao == 0) break;
 
@@ -178,42 +179,6 @@ public class CriadorPersonagem {
         System.out.println("  [4] Eremita");
 
         String[] backgrounds = {"Nobre", "Orfao", "Mercenario", "Eremita"};
-        return backgrounds[lerOpcao(1, 4) - 1];
-    }
-
-    /**
-     * Pede ao jogador que digite um valor para um atributo.
-     * O valor precisa estar entre 1 e o maximo informado.
-     * Fica em loop ate o jogador digitar um valor valido.
-     */
-    private static int lerAtributo(String nome, int maximo) {
-        while (true) {
-            System.out.print("  " + nome + " (1 a " + maximo + "): ");
-            try {
-                int valor = scanner.nextInt();
-                if (valor >= 1 && valor <= maximo) return valor;
-                System.out.println("  Valor invalido.");
-            } catch (NumberFormatException e) {
-                System.out.println("  Digite um numero.");
-            }
-        }
-    }
-
-    /**
-     * Pede ao jogador que escolha uma opcao do menu entre min e max.
-     * Fica em loop ate receber um numero valido dentro do intervalo.
-     * "public" porque tambem e usado pela classe Batalha.
-     */
-    public static int lerOpcao(int minimo, int maximo) {
-        while (true) {
-            System.out.print("  Opcao [" + minimo + "-" + maximo + "]: ");
-            try {
-                int opcao = scanner.nextInt();
-                if (opcao >= minimo && opcao <= maximo) return opcao;
-                System.out.println("  Opcao invalida.");
-            } catch (NumberFormatException e) {
-                System.out.println("  Digite um numero.");
-            }
-        }
+        return backgrounds[Leitura.lerOpcao(1, 4) - 1];
     }
 }
