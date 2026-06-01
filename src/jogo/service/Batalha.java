@@ -1,6 +1,7 @@
 package jogo.service; // declara que esta classe pertence ao pacote "jogo"
 
 import jogo.model.Personagem;
+import jogo.util.Leitura;
 
 import java.util.List;   // importa List para trabalhar com a lista de habilidades
 import java.util.Random; // importa Random para gerar numeros aleatorios (critico, chance de erro)
@@ -98,8 +99,8 @@ public class Batalha {
         }
 
         // define o maximo de opcoes com base em se tem habilidade ou nao
-        int maxOp = temHabilidade ? 4 : 3;
-        int acao = CriadorPersonagem.lerOpcao(1, maxOp); // le a escolha do jogador
+        int maximoOpcoes = temHabilidade ? 4 : 3;
+        int acao = Leitura.lerOpcao(1, maximoOpcoes); // le a escolha do jogador
 
         // executa a acao escolhida
         switch (acao) {
@@ -224,7 +225,7 @@ public class Batalha {
         }
 
         // le a escolha e pega o nome da habilidade (indice - 1 para converter para base 0)
-        int idx = CriadorPersonagem.lerOpcao(1, habilidades.size()) - 1;
+        int idx = Leitura.lerOpcao(1, habilidades.size()) - 1;
         String hab = habilidades.get(idx);
         System.out.println("  " + atacante.getNome() + " usa " + hab + "!");
 
