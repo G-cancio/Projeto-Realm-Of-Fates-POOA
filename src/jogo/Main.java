@@ -22,10 +22,10 @@ public class Main {
             System.out.println("[1] Nova Batalha");
             System.out.println("[2] Sair");
 
-            int op = Leitura.lerOpcao(1, 3);
+            int op = Leitura.lerOpcao(1, 2);
 
             if (op == 1) iniciarBatalha();  // cria personagens e briga
-            if (op == 3) rodando = false;   // encerra o loop
+            if (op == 2) rodando = false;   // encerra o loop
         }
 
         System.out.println("Ate a proxima aventura!");

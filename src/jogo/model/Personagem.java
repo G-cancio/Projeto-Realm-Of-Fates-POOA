@@ -31,6 +31,7 @@ public class Personagem {
         this.habilidades = personagemBuilder.habilidades;
         this.background = personagemBuilder.background;
         this.hpMaximo = personagemBuilder.hpMaximo;
+        this.hpAtual = personagemBuilder.hpAtual;
     }
 
     public String getNome()              { return nome; }
@@ -78,6 +79,7 @@ public class Personagem {
     }
 
     public int calcularDefesa() {
+        if (armadura == null) return 0;
         return switch (armadura) {
             case "Pesada" -> 8;
             case "Media" -> 5;

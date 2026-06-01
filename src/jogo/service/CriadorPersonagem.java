@@ -10,8 +10,6 @@ import java.util.Scanner;
 public class CriadorPersonagem {
 
     static Scanner scanner = new Scanner(System.in);
-    static Personagem personagem;
-    static int indexClasse;
 
     public static Personagem criarPersonagem(String jogador) {
         System.out.println("\n=== CRIACAO DE PERSONAGEM — " + jogador + " ===");
@@ -25,19 +23,45 @@ public class CriadorPersonagem {
             }
         }
 
+        int indexClasse = escolherClasse();
+        String classe = obterNomeClasse(indexClasse);
+        String raca = escolherRaca();
         List<Integer> atributos = escolherAtributos();
 
-        personagem = new Personagem.PersonagemBuilder()
+        // Aplicação dos bônus numéricos da raça selecionada
+        int forca = atributos.get(0);
+        int inteligencia = atributos.get(1);
+        int destreza = atributos.get(2);
+        int resistencia = atributos.get(3);
+
+        switch (raca) {
+            case "Elfo" -> {
+                destreza += 4;
+                inteligencia += 4;
+            }
+            case "Anao" -> {
+                resistencia += 6;
+                forca += 4;
+            }
+            case "Orc" -> {
+                forca += 8;
+            }
+            case "Halfling" -> {
+                destreza += 6;
+            }
+        }
+
+        Personagem personagem = new Personagem.PersonagemBuilder()
                 .nome(nome)
-                .classe(escolherClasse())
-                .raca(escolherRaca())
-                .forca(atributos.get(0))
-                .inteligencia(atributos.get(1))
-                .destreza(atributos.get(2))
-                .resistencia(atributos.get(3))
-                .armaPrincipal(escolherArma())
+                .classe(classe)
+                .raca(raca)
+                .forca(forca)
+                .inteligencia(inteligencia)
+                .destreza(destreza)
+                .resistencia(resistencia)
+                .armaPrincipal(escolherArma(indexClasse))
                 .armadura(escolherArmadura())
-                .habilidades(escolherHabilidades())
+                .habilidades(escolherHabilidades(indexClasse))
                 .background(escolherBackground())
                 .hp()
                 .build();
@@ -48,7 +72,7 @@ public class CriadorPersonagem {
         return personagem;
     }
 
-    public static String escolherClasse(){
+    public static int escolherClasse(){
         System.out.println("\nEscolha a classe:");
         System.out.println("  [1] Guerreiro — Alto dano fisico, boa resistencia");
         System.out.println("  [2] Mago      — Magia poderosa, fraco fisicamente");
@@ -56,10 +80,12 @@ public class CriadorPersonagem {
         System.out.println("  [4] Ladino    — Furtivo, ataques criticos");
         System.out.println("  [5] Paladino  — Equilibrio entre ataque e defesa");
 
-        String[] classes = {"Guerreiro", "Mago", "Arqueiro", "Ladino", "Paladino"};
+        return Leitura.lerOpcao(1, 5) - 1;
+    }
 
-        indexClasse = Leitura.lerOpcao(1, 5) - 1;
-        return classes[indexClasse];
+    private static String obterNomeClasse(int index) {
+        String[] classes = {"Guerreiro", "Mago", "Arqueiro", "Ladino", "Paladino"};
+        return classes[index];
     }
 
     public static String  escolherRaca(){
@@ -99,7 +125,7 @@ public class CriadorPersonagem {
         return armaduras[Leitura.lerOpcao(1, 4) - 1];
     }
 
-    public static String escolherArma(){
+    public static String escolherArma(int indexClasse){
         String[][] armasPorClasse = {
                 {"Espada Longa", "Machado", "Lanca", "Martelo"},
                 {"Cajado Arcano", "Varinha", "Tomo Sombrio", "Orbe"},
@@ -118,7 +144,7 @@ public class CriadorPersonagem {
         return armasDisponiveis[Leitura.lerOpcao(1, armasDisponiveis.length) - 1];
     }
 
-    public static List<String> escolherHabilidades(){
+    public static List<String> escolherHabilidades(int indexClasse){
         String[] habilidadesGuerreiro = {"Golpe Brutal", "Grito de Guerra", "Furia Berserker"};
         String[] habilidadesMago      = {"Bola de Fogo", "Raio", "Drenar Vida"};
         String[] habilidadesArqueiro  = {"Tiro Preciso", "Chuva de Flechas", "Olho de Aguia"};

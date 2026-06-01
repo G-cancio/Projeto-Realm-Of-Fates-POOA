@@ -148,7 +148,20 @@ public class Batalha {
             System.out.println("  " + atacante.getNome() + " recuperou 20 HP!");
         } else {
             int danoExtra = atacante.calcularDano() + 15;
-            int danoFinal = danoExtra - defensor.calcularDefesa();
+            int defesa = defensor.calcularDefesa();
+
+            boolean j1Atacou = (atacante == jogador1);
+            boolean defendendo = j1Atacou ? j2Defendendo : j1Defendendo;
+            if (defendendo) {
+                danoExtra = danoExtra / 2;
+
+                if (j1Atacou) j2Defendendo = false;
+                else j1Defendendo = false;
+
+                System.out.println("  Defesa ativada! Dano reduzido a metade.");
+            }
+
+            int danoFinal = danoExtra - defesa;
             if (danoFinal < 1) danoFinal = 1;
             defensor.receberDano(danoFinal);
             System.out.println("  Dano especial: " + danoFinal);
