@@ -19,6 +19,10 @@ public class CriadorPersonagem {
     // "static" significa que pertence a classe, nao a uma instancia especifica
     static Scanner scanner = new Scanner(System.in);
 
+    // PROBLEMA 2: objeto criado vazio com construtor sem argumentos.
+    // Neste momento, todos os campos sao null ou 0 — o personagem esta invalido.
+    static Personagem personagem = new Personagem();
+    static int indexClasse;
     /**
      * Exibe menus no terminal e cria um personagem com base nas escolhas do jogador.
      * Recebe o nome do jogador (ex: "Jogador 1") apenas para exibir no cabecalho.
@@ -26,10 +30,6 @@ public class CriadorPersonagem {
      */
     public static Personagem criarPersonagem(String jogador) {
         System.out.println("\n=== CRIACAO DE PERSONAGEM — " + jogador + " ===");
-
-        // PROBLEMA 2: objeto criado vazio com construtor sem argumentos.
-        // Neste momento, todos os campos sao null ou 0 — o personagem esta invalido.
-        Personagem personagem = new Personagem();
 
         // --- NOME ---
         // fica em loop ate o jogador digitar algo que nao seja vazio ou so espacos
@@ -44,6 +44,43 @@ public class CriadorPersonagem {
         personagem.setNome(nome);
 
         // --- CLASSE ---
+        escolherClasse();
+
+        // --- RACA ---
+        escolherRaca();
+
+        // --- ATRIBUTOS ---
+        // O jogador tem 40 pontos para distribuir entre 4 atributos.
+        // Cada atributo precisa ter ao menos 1 ponto.
+        // A variavel "pontos" vai diminuindo conforme os atributos sao definidos.
+        escolherAtributos();
+
+        // --- ARMA ---
+        // Cada classe tem 4 armas disponiveis para escolha.
+        // O array bidimensional organiza as armas por classe, na mesma ordem de "classes".
+        escolherArma();
+
+        // --- ARMADURA ---
+        escolherArmadura();
+
+        // --- HABILIDADES ESPECIAIS ---
+        // Cada classe tem 3 habilidades diferentes disponiveis.
+        // O jogador pode escolher ate 3, ou encerrar antes com opcao 0.
+        escolherHabilidades();
+
+        // --- BACKGROUND ---
+        escolherBackground();
+
+        // exibe o resumo do personagem criado
+        System.out.println("\nPersonagem criado!");
+        System.out.println(personagem); // chama automaticamente o toString() de Personagem
+        System.out.println("\nPressione ENTER para continuar...");
+        scanner.nextLine();
+
+        return personagem; // retorna o personagem pronto para ser usado na batalha
+    }
+
+    public static void escolherClasse(){
         System.out.println("\nEscolha a classe:");
         System.out.println("  [1] Guerreiro — Alto dano fisico, boa resistencia");
         System.out.println("  [2] Mago      — Magia poderosa, fraco fisicamente");
@@ -56,10 +93,11 @@ public class CriadorPersonagem {
 
         // le a opcao do jogador (1 a 5) e subtrai 1 para virar indice do array (0 a 4)
         // ex: jogador digita 2 (Mago) -> lerOpcao retorna 2 -> 2-1=1 -> classes[1]="Mago"
-        int indexClasse = lerOpcao(1, 5) - 1;
+        indexClasse = lerOpcao(1, 5) - 1;
         personagem.setClasse(classes[indexClasse]);
+    }
 
-        // --- RACA ---
+    public static void escolherRaca(){
         System.out.println("\nEscolha a raca:");
         System.out.println("  [1] Humano   — Versatil, sem bonus especifico");
         System.out.println("  [2] Elfo     — +4 Destreza e Inteligencia");
@@ -69,11 +107,9 @@ public class CriadorPersonagem {
 
         String[] racas = {"Humano", "Elfo", "Anao", "Orc", "Halfling"};
         personagem.setRaca(racas[lerOpcao(1, 5) - 1]); // mesma logica da classe
+    }
 
-        // --- ATRIBUTOS ---
-        // O jogador tem 40 pontos para distribuir entre 4 atributos.
-        // Cada atributo precisa ter ao menos 1 ponto.
-        // A variavel "pontos" vai diminuindo conforme os atributos sao definidos.
+    public static void escolherAtributos(){
         System.out.println("\nDistribua 40 pontos entre os 4 atributos (minimo 1 cada):");
         int pontos = 40;
 
@@ -93,9 +129,21 @@ public class CriadorPersonagem {
         personagem.setDestreza(destreza);
         personagem.setResistencia(resistencia);
 
-        // --- ARMA ---
-        // Cada classe tem 4 armas disponiveis para escolha.
-        // O array bidimensional organiza as armas por classe, na mesma ordem de "classes".
+    }
+
+    public static void escolherArmadura(){
+        System.out.println("\nEscolha a armadura:");
+        System.out.println("  [1] Pesada  — Reduz 8 de dano");
+        System.out.println("  [2] Media   — Reduz 5 de dano");
+        System.out.println("  [3] Leve    — Reduz 3 de dano");
+        System.out.println("  [4] Nenhuma — Sem reducao");
+
+        // null na posicao 3 representa "sem armadura"
+        String[] armaduras = {"Pesada", "Media", "Leve", null};
+        personagem.setArmadura(armaduras[lerOpcao(1, 4) - 1]);
+    }
+
+    public static void escolherArma(){
         String[][] armasPorClasse = {
                 {"Espada Longa", "Machado", "Lanca", "Martelo"},           // Guerreiro
                 {"Cajado Arcano", "Varinha", "Tomo Sombrio", "Orbe"},      // Mago
@@ -114,21 +162,9 @@ public class CriadorPersonagem {
 
         // le a escolha e define a arma no personagem
         personagem.setArmaPrincipal(armasDisponiveis[lerOpcao(1, armasDisponiveis.length) - 1]);
+    }
 
-        // --- ARMADURA ---
-        System.out.println("\nEscolha a armadura:");
-        System.out.println("  [1] Pesada  — Reduz 8 de dano");
-        System.out.println("  [2] Media   — Reduz 5 de dano");
-        System.out.println("  [3] Leve    — Reduz 3 de dano");
-        System.out.println("  [4] Nenhuma — Sem reducao");
-
-        // null na posicao 3 representa "sem armadura"
-        String[] armaduras = {"Pesada", "Media", "Leve", null};
-        personagem.setArmadura(armaduras[lerOpcao(1, 4) - 1]);
-
-        // --- HABILIDADES ESPECIAIS ---
-        // Cada classe tem 3 habilidades diferentes disponiveis.
-        // O jogador pode escolher ate 3, ou encerrar antes com opcao 0.
+    public static void escolherHabilidades(){
         String[] habilidadesGuerreiro = {"Golpe Brutal", "Grito de Guerra", "Furia Berserker"};
         String[] habilidadesMago      = {"Bola de Fogo", "Raio", "Drenar Vida"};
         String[] habilidadesArqueiro  = {"Tiro Preciso", "Chuva de Flechas", "Olho de Aguia"};
@@ -138,8 +174,8 @@ public class CriadorPersonagem {
         // array bidimensional: cada linha e o conjunto de habilidades de uma classe
         // a linha 0 e do Guerreiro, linha 1 do Mago, etc. — mesma ordem de "classes"
         String[][] todasHabilidades = {
-            habilidadesGuerreiro, habilidadesMago, habilidadesArqueiro,
-            habilidadesLadino, habilidadesPaladino
+                habilidadesGuerreiro, habilidadesMago, habilidadesArqueiro,
+                habilidadesLadino, habilidadesPaladino
         };
 
         // pega as habilidades da classe escolhida pelo jogador
@@ -172,8 +208,9 @@ public class CriadorPersonagem {
         }
 
         personagem.setHabilidades(escolhidas); // define a lista de habilidades no personagem
+    }
 
-        // --- BACKGROUND ---
+    public static void escolherBackground(){
         System.out.println("\nEscolha o background:");
         System.out.println("  [1] Nobre");
         System.out.println("  [2] Orfao");
@@ -187,14 +224,6 @@ public class CriadorPersonagem {
         // Se este metodo nao for chamado, hpMaximo = 0 e o personagem nao consegue lutar.
         // O Builder resolveria isso garantindo que o objeto so existiria completo.
         personagem.inicializarHP();
-
-        // exibe o resumo do personagem criado
-        System.out.println("\nPersonagem criado!");
-        System.out.println(personagem); // chama automaticamente o toString() de Personagem
-        System.out.println("\nPressione ENTER para continuar...");
-        scanner.nextLine();
-
-        return personagem; // retorna o personagem pronto para ser usado na batalha
     }
 
     /**
