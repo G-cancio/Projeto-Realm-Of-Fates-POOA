@@ -156,12 +156,15 @@ public class Personagem {
         int bonus = 0; // bonus adicional baseado na classe
 
         // verifica qual e a classe e define o bonus correspondente
+
         if (classe != null) {
-            if (classe.equals("Guerreiro")) bonus = 5;
-            else if (classe.equals("Mago"))      bonus = 8;
-            else if (classe.equals("Arqueiro"))  bonus = 4;
-            else if (classe.equals("Ladino"))    bonus = 6;
-            else if (classe.equals("Paladino"))  bonus = 3;
+            switch (classe) {
+                case "Guerreiro" -> bonus = 5;
+                case "Mago" -> bonus = 8;
+                case "Arqueiro" -> bonus = 4;
+                case "Ladino" -> bonus = 6;
+                case "Paladino" -> bonus = 3;
+            }
         }
 
         // dano = forca + metade da destreza + bonus da classe
@@ -174,13 +177,12 @@ public class Personagem {
      * Se nao tiver armadura, a defesa e zero.
      */
     public int calcularDefesa() {
-        if (armadura == null) return 0; // sem armadura, sem defesa
-
-        if (armadura.equals("Pesada")) return 8; // armadura pesada absorve mais dano
-        if (armadura.equals("Media"))  return 5; // armadura media absorve dano moderado
-        if (armadura.equals("Leve"))   return 3; // armadura leve absorve pouco dano
-
-        return 0; // caso nenhuma das anteriores, retorna 0
+        return switch (armadura) {
+            case "Pesada" -> 8;
+            case "Media" -> 5;
+            case "Leve" -> 3;
+            default -> 0;
+        };
     }
 
     /**
