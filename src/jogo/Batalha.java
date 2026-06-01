@@ -100,10 +100,12 @@ public class Batalha {
         int acao = CriadorPersonagem.lerOpcao(1, maxOp); // le a escolha do jogador
 
         // executa a acao escolhida
-        if (acao == 1) atacar(atacante, defensor, j1Vez);
-        if (acao == 2) ataquePesado(atacante, defensor, j1Vez);
-        if (acao == 3) defender(atacante, j1Vez);
-        if (acao == 4) usarHabilidade(atacante, defensor);
+        switch (acao) {
+            case 1 -> atacar(atacante, defensor, j1Vez);
+            case 2 -> ataquePesado(atacante, defensor, j1Vez);
+            case 3 -> defender(atacante, j1Vez);
+            case 4 -> usarHabilidade(atacante, defensor);
+        }
 
         System.out.println("\nPressione ENTER para continuar...");
         scanner.nextLine(); // espera o jogador pressionar ENTER antes de continuar
