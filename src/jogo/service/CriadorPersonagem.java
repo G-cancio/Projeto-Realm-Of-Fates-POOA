@@ -1,4 +1,6 @@
-package jogo;
+package jogo.service;
+
+import jogo.model.Personagem;
 
 import java.util.ArrayList; // importa ArrayList, uma implementacao de lista dinamica
 import java.util.List;      // importa a interface List

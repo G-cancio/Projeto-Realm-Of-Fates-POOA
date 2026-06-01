@@ -1,5 +1,9 @@
 package jogo; // declara que esta classe pertence ao pacote "jogo"
 
+import jogo.service.Batalha;
+import jogo.service.CriadorPersonagem;
+import jogo.model.Personagem;
+
 import java.util.Scanner; // importa Scanner para ler o ENTER do jogador
 
 /**

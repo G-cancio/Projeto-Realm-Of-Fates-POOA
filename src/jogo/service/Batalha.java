@@ -1,4 +1,6 @@
-package jogo; // declara que esta classe pertence ao pacote "jogo"
+package jogo.service; // declara que esta classe pertence ao pacote "jogo"
+
+import jogo.model.Personagem;
 
 import java.util.List;   // importa List para trabalhar com a lista de habilidades
 import java.util.Random; // importa Random para gerar numeros aleatorios (critico, chance de erro)

@@ -1,4 +1,4 @@
-package jogo; // declara que esta classe pertence ao pacote "jogo"
+package jogo.model; // declara que esta classe pertence ao pacote "jogo"
 
 import java.util.List; // importa a interface List para usar listas
 
