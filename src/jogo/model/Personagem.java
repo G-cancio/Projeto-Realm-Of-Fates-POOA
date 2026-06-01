@@ -1,21 +1,7 @@
-package jogo.model; // declara que esta classe pertence ao pacote "jogo"
+package jogo.model;
 
-import java.util.List; // importa a interface List para usar listas
+import java.util.List;
 
-/**
- * Representa um personagem do jogo Realm of Fates.
- *
- * Esta classe demonstra dois problemas que o padrao Builder resolve:
- *
- * PROBLEMA 1 — Construtor telescopico:
- *   Tem 11 parametros, o que torna a criacao confusa e dificil de manter.
- *   Atributos opcionais (arma, armadura, etc.) obrigam o uso de null.
- *
- * PROBLEMA 2 — Construtor vazio + setters livres:
- *   O objeto e criado sem nenhum dado. Ele existe na memoria mas esta
- *   incompleto. Qualquer codigo que usar esse objeto antes de todos os
- *   setters serem chamados vai encontrar valores nulos ou zeros.
- */
 public class Personagem {
 
     private String nome;
@@ -61,37 +47,21 @@ public class Personagem {
     public int getHpMaximo()             { return hpMaximo; }
     public int getHpAtual()              { return hpAtual; }
 
-    /**
-     * Retorna true se o personagem ainda tem HP acima de zero.
-     * Usado pela Batalha para saber se a luta continua.
-     */
+
     public boolean estaVivo() {
         return hpAtual > 0;
     }
 
-    /**
-     * Reduz o HP atual pelo valor do dano recebido.
-     * Se o HP cair abaixo de 0, e fixado em 0 (nao pode ser negativo).
-     */
     public void receberDano(int dano) {
         hpAtual = hpAtual - dano;
-        if (hpAtual < 0) hpAtual = 0; // garante que HP nao fique negativo
+        if (hpAtual < 0) hpAtual = 0;
     }
 
-    /**
-     * Aumenta o HP atual pelo valor da cura.
-     * Se o HP ultrapassar o maximo, e fixado no maximo.
-     */
     public void receberCura(int cura) {
         hpAtual = hpAtual + cura;
-        if (hpAtual > hpMaximo) hpAtual = hpMaximo; // nao pode passar do maximo
+        if (hpAtual > hpMaximo) hpAtual = hpMaximo;
     }
 
-    /**
-     * Calcula o dano que este personagem causa por ataque.
-     * Formula: forca + metade da destreza + bonus da classe.
-     * Cada classe tem um bonus diferente de dano.
-     */
     public int calcularDano() {
         int bonus = 0;
 
@@ -107,11 +77,6 @@ public class Personagem {
         return forca + (destreza / 2) + bonus;
     }
 
-    /**
-     * Retorna quanto de dano este personagem absorve por ataque.
-     * O valor depende do tipo de armadura equipada.
-     * Se nao tiver armadura, a defesa e zero.
-     */
     public int calcularDefesa() {
         return switch (armadura) {
             case "Pesada" -> 8;
@@ -121,20 +86,12 @@ public class Personagem {
         };
     }
 
-    /**
-     * Gera uma barra visual de HP para exibir no terminal.
-     * Exemplo: [████████████░░░░░░░░] 60/100
-     * Os blocos cheios (█) representam o HP atual.
-     * Os blocos vazios (░) representam o HP perdido.
-     */
     public String barraHP() {
-        int total = 20; // tamanho total da barra em caracteres
+        int total = 20;
 
-        // calcula quantos blocos cheios devem aparecer
-        // ex: se hpAtual=60 e hpMaximo=100, cheios = (60/100) * 20 = 12
         int cheios = (int) ((double) hpAtual / hpMaximo * total);
 
-        // monta a barra caractere por caractere
+
         String barra = "";
         for (int i = 0; i < cheios; i++) barra += "█"; // blocos cheios
         for (int i = cheios; i < total; i++) barra += "░"; // blocos vazios
@@ -142,18 +99,11 @@ public class Personagem {
         return "[" + barra + "] " + hpAtual + "/" + hpMaximo;
     }
 
-    /**
-     * Retorna uma representacao em texto do personagem.
-     * Chamado automaticamente quando se faz System.out.println(personagem).
-     * Usa o operador ternario (? :) para exibir "Nenhuma/Nenhum"
-     * quando um campo opcional nao foi preenchido.
-     */
     @Override
     public String toString() {
         return "Nome: " + nome + " | Classe: " + classe + " | Raca: " + raca + "\n"
              + "Forca: " + forca + " | Inteligencia: " + inteligencia
              + " | Destreza: " + destreza + " | Resistencia: " + resistencia + "\n"
-             // se armaPrincipal for null, exibe "Nenhuma"; senao exibe o valor
              + "Arma: "      + (armaPrincipal != null ? armaPrincipal : "Nenhuma")
              + " | Armadura: " + (armadura    != null ? armadura      : "Nenhuma")
              + " | Background: " + (background != null ? background   : "Nenhum") + "\n"
@@ -170,15 +120,14 @@ public class Personagem {
         private int destreza;
         private int resistencia;
 
-        // Atributos opcionais — o personagem pode existir sem esses valores
         private String armaPrincipal;
         private String armadura;
-        private List<String> habilidades; // lista de ate 3 habilidades especiais
+        private List<String> habilidades;
         private String background;
 
-        // HP (pontos de vida) calculado a partir da resistencia
-        private int hpMaximo; // valor maximo de HP do personagem
-        private int hpAtual;  // HP atual durante a batalha
+
+        private int hpMaximo;
+        private int hpAtual;
 
         public PersonagemBuilder nome(String nome) {
             this.nome = nome;
@@ -210,7 +159,6 @@ public class Personagem {
             return this;
         }
 
-        // Atributos opcionais — o personagem pode existir sem esses valores
         public PersonagemBuilder armaPrincipal(String armaPrincipal) {
             this.armaPrincipal = armaPrincipal;
             return this;
