@@ -3,29 +3,16 @@ package jogo.service;
 import jogo.model.Personagem;
 import jogo.util.Leitura;
 
-import java.util.ArrayList; // importa ArrayList, uma implementacao de lista dinamica
-import java.util.List;      // importa a interface List
-import java.util.Scanner;   // importa Scanner para ler entradas do teclado
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
-/**
- * Responsavel por criar personagens de forma interativa no terminal.
- *
- * PROBLEMA demonstrado aqui:
- * O personagem e criado com o construtor vazio (new Personagem()) e
- * seus campos sao preenchidos um a um via setters. Isso significa que
- * o objeto existe na memoria antes de estar pronto — qualquer acesso
- * antes do ultimo setter resulta em dados invalidos (null ou zero).
- */
 public class CriadorPersonagem {
 
     static Scanner scanner = new Scanner(System.in);
     static Personagem personagem;
     static int indexClasse;
-    /**
-     * Exibe menus no terminal e cria um personagem com base nas escolhas do jogador.
-     * Recebe o nome do jogador (ex: "Jogador 1") apenas para exibir no cabecalho.
-     * Retorna o personagem criado ao final.
-     */
+
     public static Personagem criarPersonagem(String jogador) {
         System.out.println("\n=== CRIACAO DE PERSONAGEM — " + jogador + " ===");
 
