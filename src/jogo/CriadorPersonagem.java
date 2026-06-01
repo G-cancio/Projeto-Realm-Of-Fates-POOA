@@ -29,7 +29,7 @@ public class CriadorPersonagem {
 
         // PROBLEMA 2: objeto criado vazio com construtor sem argumentos.
         // Neste momento, todos os campos sao null ou 0 — o personagem esta invalido.
-        Personagem p = new Personagem();
+        Personagem personagem = new Personagem();
 
         // --- NOME ---
         // fica em loop ate o jogador digitar algo que nao seja vazio ou so espacos
@@ -41,7 +41,7 @@ public class CriadorPersonagem {
                 System.out.println("  O nome nao pode ser vazio.");
             }
         }
-        p.setNome(nome);
+        personagem.setNome(nome);
 
         // --- CLASSE ---
         System.out.println("\nEscolha a classe:");
@@ -56,8 +56,8 @@ public class CriadorPersonagem {
 
         // le a opcao do jogador (1 a 5) e subtrai 1 para virar indice do array (0 a 4)
         // ex: jogador digita 2 (Mago) -> lerOpcao retorna 2 -> 2-1=1 -> classes[1]="Mago"
-        int idxClasse = lerOpcao(1, 5) - 1;
-        p.setClasse(classes[idxClasse]);
+        int indexClasse = lerOpcao(1, 5) - 1;
+        personagem.setClasse(classes[indexClasse]);
 
         // --- RACA ---
         System.out.println("\nEscolha a raca:");
@@ -68,7 +68,7 @@ public class CriadorPersonagem {
         System.out.println("  [5] Halfling — +6 Destreza");
 
         String[] racas = {"Humano", "Elfo", "Anao", "Orc", "Halfling"};
-        p.setRaca(racas[lerOpcao(1, 5) - 1]); // mesma logica da classe
+        personagem.setRaca(racas[lerOpcao(1, 5) - 1]); // mesma logica da classe
 
         // --- ATRIBUTOS ---
         // O jogador tem 40 pontos para distribuir entre 4 atributos.
@@ -88,10 +88,10 @@ public class CriadorPersonagem {
         System.out.println("  Resistencia: " + resistencia + " (pontos restantes)");
 
         // define os atributos no personagem via setters
-        p.setForca(forca);
-        p.setInteligencia(inteligencia);
-        p.setDestreza(destreza);
-        p.setResistencia(resistencia);
+        personagem.setForca(forca);
+        personagem.setInteligencia(inteligencia);
+        personagem.setDestreza(destreza);
+        personagem.setResistencia(resistencia);
 
         // --- ARMA ---
         // Cada classe tem 4 armas disponiveis para escolha.
@@ -105,7 +105,7 @@ public class CriadorPersonagem {
         };
 
         // pega as armas disponiveis para a classe escolhida pelo jogador
-        String[] armasDisponiveis = armasPorClasse[idxClasse];
+        String[] armasDisponiveis = armasPorClasse[indexClasse];
 
         System.out.println("\nEscolha a arma:");
         for (int i = 0; i < armasDisponiveis.length; i++) {
@@ -113,7 +113,7 @@ public class CriadorPersonagem {
         }
 
         // le a escolha e define a arma no personagem
-        p.setArmaPrincipal(armasDisponiveis[lerOpcao(1, armasDisponiveis.length) - 1]);
+        personagem.setArmaPrincipal(armasDisponiveis[lerOpcao(1, armasDisponiveis.length) - 1]);
 
         // --- ARMADURA ---
         System.out.println("\nEscolha a armadura:");
@@ -124,7 +124,7 @@ public class CriadorPersonagem {
 
         // null na posicao 3 representa "sem armadura"
         String[] armaduras = {"Pesada", "Media", "Leve", null};
-        p.setArmadura(armaduras[lerOpcao(1, 4) - 1]);
+        personagem.setArmadura(armaduras[lerOpcao(1, 4) - 1]);
 
         // --- HABILIDADES ESPECIAIS ---
         // Cada classe tem 3 habilidades diferentes disponiveis.
@@ -143,7 +143,7 @@ public class CriadorPersonagem {
         };
 
         // pega as habilidades da classe escolhida pelo jogador
-        String[] habilidadesDisponiveis = todasHabilidades[idxClasse];
+        String[] habilidadesDisponiveis = todasHabilidades[indexClasse];
 
         System.out.println("\nEscolha ate 3 habilidades (0 para encerrar):");
         for (int i = 0; i < habilidadesDisponiveis.length; i++) {
@@ -156,11 +156,11 @@ public class CriadorPersonagem {
 
         // loop continua ate o jogador escolher 3 habilidades ou digitar 0
         while (escolhidas.size() < 3) {
-            int op = lerOpcao(0, habilidadesDisponiveis.length);
+            int opcao = lerOpcao(0, habilidadesDisponiveis.length);
 
-            if (op == 0) break; // jogador encerrou a selecao
+            if (opcao == 0) break; // jogador encerrou a selecao
 
-            String hab = habilidadesDisponiveis[op - 1]; // pega o nome da habilidade escolhida
+            String hab = habilidadesDisponiveis[opcao - 1]; // pega o nome da habilidade escolhida
 
             // verifica se a habilidade ja foi escolhida antes
             if (!escolhidas.contains(hab)) {
@@ -171,7 +171,7 @@ public class CriadorPersonagem {
             }
         }
 
-        p.setHabilidades(escolhidas); // define a lista de habilidades no personagem
+        personagem.setHabilidades(escolhidas); // define a lista de habilidades no personagem
 
         // --- BACKGROUND ---
         System.out.println("\nEscolha o background:");
@@ -181,20 +181,20 @@ public class CriadorPersonagem {
         System.out.println("  [4] Eremita");
 
         String[] backgrounds = {"Nobre", "Orfao", "Mercenario", "Eremita"};
-        p.setBackground(backgrounds[lerOpcao(1, 4) - 1]);
+        personagem.setBackground(backgrounds[lerOpcao(1, 4) - 1]);
 
         // PROBLEMA: HP precisa ser inicializado manualmente apos todos os setters.
         // Se este metodo nao for chamado, hpMaximo = 0 e o personagem nao consegue lutar.
         // O Builder resolveria isso garantindo que o objeto so existiria completo.
-        p.inicializarHP();
+        personagem.inicializarHP();
 
         // exibe o resumo do personagem criado
         System.out.println("\nPersonagem criado!");
-        System.out.println(p); // chama automaticamente o toString() de Personagem
+        System.out.println(personagem); // chama automaticamente o toString() de Personagem
         System.out.println("\nPressione ENTER para continuar...");
         scanner.nextLine();
 
-        return p; // retorna o personagem pronto para ser usado na batalha
+        return personagem; // retorna o personagem pronto para ser usado na batalha
     }
 
     /**
@@ -206,8 +206,8 @@ public class CriadorPersonagem {
         while (true) {
             System.out.print("  " + nome + " (1 a " + maximo + "): ");
             try {
-                int val = Integer.parseInt(scanner.nextLine()); // converte texto para numero
-                if (val >= 1 && val <= maximo) return val;     // valor valido: retorna
+                int valor = Integer.parseInt(scanner.nextLine()); // converte texto para numero
+                if (valor >= 1 && valor <= maximo) return valor;     // valor valido: retorna
                 System.out.println("  Valor invalido.");        // fora do intervalo
             } catch (NumberFormatException e) {
                 // NumberFormatException ocorre quando o texto nao pode ser convertido para int
@@ -222,12 +222,12 @@ public class CriadorPersonagem {
      * Fica em loop ate receber um numero valido dentro do intervalo.
      * "public" porque tambem e usado pela classe Batalha.
      */
-    public static int lerOpcao(int min, int max) {
+    public static int lerOpcao(int minimo, int maximo) {
         while (true) {
-            System.out.print("  Opcao [" + min + "-" + max + "]: ");
+            System.out.print("  Opcao [" + minimo + "-" + maximo + "]: ");
             try {
                 int op = Integer.parseInt(scanner.nextLine()); // converte texto para numero
-                if (op >= min && op <= max) return op;         // opcao valida: retorna
+                if (op >= minimo && op <= maximo) return op;         // opcao valida: retorna
                 System.out.println("  Opcao invalida.");
             } catch (NumberFormatException e) {
                 // mesmo tratamento: jogador digitou algo que nao e numero
