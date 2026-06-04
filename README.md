@@ -37,22 +37,23 @@ O projeto foi desenvolvido utilizando conceitos de Programação Orientada a Obj
 ## Estrutura do Projeto
 
 ```
-jogo/
-├── annotation/
-│   └── Validacao.java
-│
-├── model/
-│   └── Personagem.java
-│
-├── service/
-│   ├── Batalha.java
-│   └── CriadorPersonagem.java
-│
-├── util/
-│   ├── Leitura.java
-│   └── Validador.java
-│
-└── Main.java
+src/
+└── jogo/
+    ├── annotation/
+    │   └── Validacao.java
+    │
+    ├── model/
+    │   └── Personagem.java
+    │
+    ├── service/
+    │   ├── Batalha.java
+    │   └── CriadorPersonagem.java
+    │
+    ├── util/
+    │   ├── Leitura.java
+    │   └── Validador.java
+    │
+    └── Main.java
 ```
 
 ---
@@ -74,11 +75,13 @@ jogo/
 
 1. Abra o terminal na pasta raiz do projeto.
 
-2. Compile os arquivos:
+2. Navegue até a pasta de código-fonte e compile os arquivos:
 
 ```bash
+cd src
 javac jogo/**/*.java
 ```
+*(Nota: no Windows, dependendo do terminal, você pode precisar compilar listando os arquivos ou usando `javac jogo/*.java jogo/*/*.java` caso o `**` não seja suportado)*
 
 3. Execute a aplicação:
 
