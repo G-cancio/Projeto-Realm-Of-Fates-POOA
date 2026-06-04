@@ -1,46 +1,46 @@
-package jogo; // declara que esta classe pertence ao pacote "jogo"
+package jogo;
 
-import java.util.Scanner; // importa Scanner para ler o ENTER do jogador
+import java.util.Scanner;
+import jogo.model.Personagem;
+import jogo.service.Batalha;
+import jogo.service.CriadorPersonagem;
+import jogo.util.Leitura;
 
 /**
- * Classe principal do jogo Realm of Fates.
- * E aqui que o programa comeca (metodo main).
- *
- * O menu oferece tres opcoes:
- * 1. Nova Batalha — cria dois personagens e inicia a luta
- * 2. Ver Problema — demonstra os dois problemas sem o padrao Builder
- * 3. Sair         — encerra o programa
+ * Ponto de entrada principal do jogo Realm of Fates.
+ * Exibe um menu simples com duas opções: iniciar nova batalha ou sair.
  */
 public class Main {
 
-    // Scanner para ler o ENTER do jogador ao voltar ao menu
-    static Scanner scanner = new Scanner(System.in);
+    private static Scanner scanner = new Scanner(System.in);
 
     /**
-     * Ponto de entrada do programa.
-     * O Java sempre comeca a execucao por este metodo.
+     * Método principal invocado pela JVM.
+     * Mantém o programa em loop até que o usuário escolha sair.
+     *
+     * @param args argumentos da linha de comando (não utilizados)
      */
     public static void main(String[] args) {
         System.out.println("=== REALM OF FATES ===\n");
 
-        // loop principal do menu — continua ate o jogador escolher "Sair"
         boolean rodando = true;
         while (rodando) {
             System.out.println("[1] Nova Batalha");
             System.out.println("[2] Sair");
 
-            int op = CriadorPersonagem.lerOpcao(1, 3); // le a opcao do jogador
+            int op = Leitura.lerOpcao(1, 2);
 
-            if (op == 1) iniciarBatalha();  // cria personagens e briga
-            if (op == 3) rodando = false;   // encerra o loop
+            if (op == 1) iniciarBatalha();
+            if (op == 2) rodando = false;
         }
 
         System.out.println("Ate a proxima aventura!");
     }
 
     /**
-     * Cria os dois personagens via menu interativo e inicia a batalha.
-     * Cada jogador passa pelo processo completo de criacao antes de lutar.
+     * Cria dois personagens (Jogador 1 e Jogador 2) através do
+     * {@link CriadorPersonagem} e inicia a batalha entre eles.
+     * Após o fim da batalha, aguarda o usuário pressionar ENTER para voltar ao menu.
      */
     private static void iniciarBatalha() {
         System.out.println("\n=== JOGADOR 1, crie seu personagem! ===");
