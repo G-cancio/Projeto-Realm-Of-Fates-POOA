@@ -1,4 +1,5 @@
 package jogo;
+import java.util.List;
 import java.util.Scanner;
 import jogo.model.Personagem;
 import jogo.service.Batalha;
