@@ -1,31 +1,43 @@
 package jogo.service;
-
-import jogo.model.Personagem;
-import jogo.util.Leitura;
-
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import jogo.model.Personagem;
+import jogo.util.Leitura;
 
-
+/**
+ * Gerencia o combate entre dois personagens em turnos alternados.
+ * Controla ações como ataque normal, ataque pesado, defesa e uso de habilidades.
+ * Exibe status a cada turno e declara o vencedor ao final.
+ */
 public class Batalha {
 
-    Scanner scanner = new Scanner(System.in);
-    Random random = new Random();
+    private Scanner scanner = new Scanner(System.in);
+    private Random random = new Random();
 
-    Personagem jogador1;
-    Personagem jogador2;
+    private Personagem jogador1;
+    private Personagem jogador2;
 
-    boolean j1Defendendo = false;
-    boolean j2Defendendo = false;
+    private boolean j1Defendendo = false;
+    private boolean j2Defendendo = false;
 
-    int turno = 1;
+    private int turno = 1;
 
+    /**
+     * Construtor que recebe os dois combatentes.
+     *
+     * @param jogador1 primeiro personagem (ataca primeiro)
+     * @param jogador2 segundo personagem
+     */
     public Batalha(Personagem jogador1, Personagem jogador2) {
         this.jogador1 = jogador1;
         this.jogador2 = jogador2;
     }
 
+    /**
+     * Inicia o loop da batalha enquanto ambos estiverem vivos.
+     * A cada iteração, executa um turno para cada jogador alternadamente.
+     */
     public void iniciar() {
         System.out.println("\n=== A BATALHA COMECA! ===\n");
 
@@ -38,6 +50,15 @@ public class Batalha {
         exibirResultado();
     }
 
+    /**
+     * Executa um turno completo para um personagem atacante contra um defensor.
+     * Exibe menu de ações, lê a escolha e delega para o método específico.
+     *
+     * @param atacante personagem que age no turno
+     * @param defensor personagem que sofre as ações
+     * @param label    identificador textual ("JOGADOR 1" ou "JOGADOR 2")
+     * @param j1Vez    {@code true} se for a vez do jogador 1 (para controle de estado defensivo)
+     */
     private void executarTurno(Personagem atacante, Personagem defensor, String label, boolean j1Vez) {
         exibirStatus();
         System.out.println("--- TURNO " + turno + " | VEZ DE: " + atacante.getNome() + " (" + label + ") ---");
@@ -67,6 +88,14 @@ public class Batalha {
         scanner.nextLine();
     }
 
+    /**
+     * Executa um ataque normal: calcula dano, aplica defesa e possível estado de defesa do oponente.
+     * Chance de 10% de acerto crítico (+50% dano).
+     *
+     * @param atacante  quem ataca
+     * @param defensor  quem defende
+     * @param j1Atacou  indica se o atacante é o jogador 1 (para controle de flag de defesa)
+     */
     private void atacar(Personagem atacante, Personagem defensor, boolean j1Atacou) {
         int dano = atacante.calcularDano();
         int defesa = defensor.calcularDefesa();
@@ -74,10 +103,8 @@ public class Batalha {
         boolean defendendo = j1Atacou ? j2Defendendo : j1Defendendo;
         if (defendendo) {
             dano = dano / 2;
-
             if (j1Atacou) j2Defendendo = false;
             else j1Defendendo = false;
-
             System.out.println("  Defesa ativada! Dano reduzido a metade.");
         }
 
@@ -95,9 +122,16 @@ public class Batalha {
         System.out.println("  Dano: " + dano + " | Defesa: " + defesa + " | Dano final: " + danoFinal);
     }
 
+    /**
+     * Ataque pesado: +50% de dano mas com 70% de chance de acerto.
+     * Se errar, não causa dano.
+     *
+     * @param atacante  quem ataca
+     * @param defensor  quem defende
+     * @param j1Atacou  indica se é jogador 1
+     */
     private void ataquePesado(Personagem atacante, Personagem defensor, boolean j1Atacou) {
         System.out.println("  " + atacante.getNome() + " prepara um ataque pesado...");
-
 
         boolean acertou = random.nextInt(10) < 7;
         if (acertou) {
@@ -114,26 +148,36 @@ public class Batalha {
 
             int danoFinal = dano - defesa;
             if (danoFinal < 1) danoFinal = 1;
-
             defensor.receberDano(danoFinal);
             System.out.println("  Acertou! Dano final: " + danoFinal);
         } else {
-
             System.out.println("  Errou! O ataque nao conectou.");
         }
     }
 
+    /**
+     * Ativa o modo defesa para o personagem, reduzindo pela metade o dano do próximo ataque recebido.
+     *
+     * @param personagem  o personagem que defende
+     * @param j1Defendeu  {@code true} se for o jogador 1 defendendo
+     */
     private void defender(Personagem personagem, boolean j1Defendeu) {
         System.out.println("  " + personagem.getNome() + " assume postura defensiva!");
         System.out.println("  O proximo dano recebido sera reduzido em 50%.");
-
         if (j1Defendeu) j1Defendendo = true;
         else j2Defendendo = true;
     }
 
+    /**
+     * Permite usar uma habilidade especial do personagem atacante.
+     * Se o nome da habilidade contiver "Cura", recupera 20 HP do próprio atacante.
+     * Caso contrário, causa dano extra (dano base + 15) no defensor.
+     *
+     * @param atacante  quem usa a habilidade
+     * @param defensor  alvo da habilidade (se for ofensiva)
+     */
     private void usarHabilidade(Personagem atacante, Personagem defensor) {
         List<String> habilidades = atacante.getHabilidades();
-
         System.out.println("\n  Escolha a habilidade:");
         for (int i = 0; i < habilidades.size(); i++) {
             System.out.println("    [" + (i + 1) + "] " + habilidades.get(i));
@@ -154,10 +198,8 @@ public class Batalha {
             boolean defendendo = j1Atacou ? j2Defendendo : j1Defendendo;
             if (defendendo) {
                 danoExtra = danoExtra / 2;
-
                 if (j1Atacou) j2Defendendo = false;
                 else j1Defendendo = false;
-
                 System.out.println("  Defesa ativada! Dano reduzido a metade.");
             }
 
@@ -168,7 +210,7 @@ public class Batalha {
         }
     }
 
-
+    /** Exibe a barra de HP de ambos os personagens. */
     private void exibirStatus() {
         System.out.println("\n--- STATUS ---");
         System.out.println(jogador1.getNome() + " HP: " + jogador1.barraHP());
@@ -176,9 +218,9 @@ public class Batalha {
         System.out.println();
     }
 
+    /** Exibe o vencedor e o HP final do vencedor. */
     private void exibirResultado() {
         System.out.println("\n=== FIM DE BATALHA ===");
-
         if (jogador1.estaVivo()) {
             System.out.println("VENCEDOR: " + jogador1.getNome());
             System.out.println("Derrotado: " + jogador2.getNome());
